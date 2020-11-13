@@ -18,8 +18,8 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "25vw",
     height: "95vh",
-    background: "#ACA",
     float: "left",
+    background: "#f5f5f5",
   },
 }));
 

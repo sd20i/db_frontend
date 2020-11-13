@@ -19,7 +19,7 @@ const useStyles = makeStyles((theme) => ({
     width: "75vw",
     height: "95vh",
     float: "left",
-    background: "#AEF",
+    background: "#FFF",
   },
 }));
 

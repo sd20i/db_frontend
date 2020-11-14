@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     width: "100vw",
     verticalPadding: "1.1vh",
-    background: "#f5f5f5",
+    background: "#FFF",
   },
   headline: { padding: "1.3vh" },
 }));

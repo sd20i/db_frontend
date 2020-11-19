@@ -32,8 +32,17 @@ function OrderListContainer(props) {
           <h4 className={s.emptyMsg}>Product list is empty</h4>
         )}
       </div>
-      <div className={s.totalprice}>
-        <h3>Total: {totalPrice} ,-</h3>
+      <div className={s.footerCon}>
+        <h3 className={s.totalPrice}>Total: {totalPrice} ,-</h3>
+        <div className={s.submit}>
+          <button
+            className={productList.length === 0 ? s.buttonInactive : s.button}
+            disabled={productList.length === 0}
+            onClick={() => console.log("hey")}
+          >
+            Checkout
+          </button>
+        </div>
       </div>
     </div>
   );
@@ -60,8 +69,29 @@ const useStyles = makeStyles((theme) => ({
     overflow: "scroll",
     height: "80vh",
   },
-  totalprice: {
-    padding: "1vh",
+  footerCon: {
+    display: "flex",
+    flex: 1,
+    flexDirection: "row",
+  },
+  totalPrice: { flex: 1, padding: "7px 0px 0px 15px" },
+  submit: { flex: 1, textAlign: "center" },
+  button: {
+    width: "80%",
+    border: "none",
+    padding: "10px 15px",
+    background: "#27ae60",
+    color: "#FFF",
+    fontWeight: "bold",
+    cursor: "pointer",
+  },
+  buttonInactive: {
+    width: "80%",
+    border: "none",
+    padding: "10px 15px",
+    background: "#CCC",
+    color: "#EEE",
+    fontWeight: "bold",
   },
   emptyMsg: {
     width: "100%",

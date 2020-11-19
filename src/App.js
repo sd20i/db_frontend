@@ -17,12 +17,13 @@ function App(props) {
   };
 
   // adding product to product list
-  const addProduct = async (product) => {
+  const addProduct = async (product, productType) => {
     let productListCopy = [...productList];
     var result = await productListCopy.filter((obj) => {
       return obj.product_type_fk === product.product_type_fk;
     });
     if (result.length === 0) {
+      product.product_type = productType;
       productListCopy.push(product);
     }
     updateList(productListCopy);
@@ -50,13 +51,21 @@ function App(props) {
     newList.map((price) => {
       return (priceNew = price.p_price + priceNew);
     });
-    setTotalPrice(priceNew.toFixed(2));
+    let formatted = priceNew
+      .toFixed(2)
+      .toString()
+      .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    setTotalPrice(formatted);
   };
 
   return (
     <div className={s.root}>
       <Header />
-      <ProductContainer addproductToList={(product) => addProduct(product)} />
+      <ProductContainer
+        addproductToList={(product, productType) =>
+          addProduct(product, productType)
+        }
+      />
       <OrderListContainer
         productList={productList}
         removeProduct={(product) => removeProduct(product)}

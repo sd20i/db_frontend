@@ -5,16 +5,17 @@ import { makeStyles } from "@material-ui/core/";
 
 function OrderItem(props) {
   const s = useStyles();
-  const { product } = props;
+  const { product, productType } = props;
 
   const remove = (product) => {
     props.removeProduct(product);
   };
 
+  console.log(productType);
   return (
     <div className={s.root}>
       <header className={s.headline}>
-        <h4 className={s.head}>headline</h4>
+        <h4 className={s.head}>{productType}</h4>
         <p className={s.remove} onClick={() => remove(product)}>
           Remove
         </p>

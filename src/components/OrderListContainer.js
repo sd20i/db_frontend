@@ -1,13 +1,13 @@
 "use-strict";
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import OrderItem from "./OrderItem";
 import { makeStyles } from "@material-ui/core/";
 
 function OrderListContainer(props) {
   const s = useStyles();
-  const [price] = useState(0);
-  const { productList, totalPrice, type } = props;
+
+  const { productList, totalPrice } = props;
 
   const remove = (product) => {
     return props.removeProduct(product);
@@ -25,6 +25,7 @@ function OrderListContainer(props) {
                 key={carPart.p_id}
                 product={carPart}
                 removeProduct={(product) => remove(product)}
+                productType={carPart.product_type}
               />
             );
           return null;

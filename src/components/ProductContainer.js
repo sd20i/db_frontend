@@ -17,8 +17,8 @@ function ProductContainer(props) {
     setProductsList(products);
   };
 
-  const addProductToList = (item) => {
-    return props.addproductToList(item);
+  const addProductToList = (item, productType) => {
+    return props.addproductToList(item, productType);
   };
 
   return (
@@ -31,7 +31,7 @@ function ProductContainer(props) {
             <Product
               products={productType.Products}
               manufacture={productType.products}
-              addProduct={(item) => addProductToList(item)}
+              addProduct={(item) => addProductToList(item, productType.pt_name)}
             />
           </div>
         );

@@ -5,7 +5,7 @@ import { makeStyles } from "@material-ui/core/";
 
 function OrderItem(props) {
   const s = useStyles();
-  const { id, model_name, price, product_type, manufacture } = props;
+  const { product } = props;
 
   const remove = (product) => {
     props.removeProduct(product);
@@ -14,8 +14,8 @@ function OrderItem(props) {
   return (
     <div className={s.root}>
       <header className={s.headline}>
-        <h4 className={s.head}>{product_type}</h4>
-        <p className={s.remove} onClick={() => remove({ ...props })}>
+        <h4 className={s.head}>headline</h4>
+        <p className={s.remove} onClick={() => remove(product)}>
           Remove
         </p>
       </header>
@@ -23,10 +23,10 @@ function OrderItem(props) {
       <section className={s.orderItem}>
         <div className={s.data}>
           <p>
-            {manufacture} - {model_name}
+            {product.Manufacture.m_name} - {product.p_model_name}
           </p>
 
-          <p className={s.price}>{price},-</p>
+          <p className={s.price}>{product.p_price} ,-</p>
         </div>
       </section>
     </div>
@@ -38,7 +38,8 @@ export default OrderItem;
 const useStyles = makeStyles((theme) => ({
   root: {
     padding: 2,
-    margin: "5px 5px 10px 5px",
+    marginBottom: 5,
+    borderBottom: "1px solid #0f0f0f",
     background: "#FFF",
   },
   headline: {

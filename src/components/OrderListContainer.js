@@ -7,10 +7,10 @@ import { makeStyles } from "@material-ui/core/";
 function OrderListContainer(props) {
   const s = useStyles();
   const [price] = useState(0);
-  const { carParts } = props;
+  const { productList, totalPrice, type } = props;
 
   const remove = (product) => {
-    props.removeProduct(product);
+    return props.removeProduct(product);
   };
 
   return (
@@ -18,23 +18,21 @@ function OrderListContainer(props) {
       <h3 className={s.headline}>Order list</h3>
 
       <div className={s.orderlist}>
-        {carParts.map((carPart) => {
-          return (
-            <OrderItem
-              key={carPart.product_id}
-              id={carPart.product_id}
-              model_name={carPart.product_model_name}
-              price={carPart.product_price}
-              product_type={carPart.product_type_name}
-              manufacture={carPart.manufacture_name}
-              removeProduct={(product) => remove(product)}
-            />
-          );
+        {productList.map((carPart) => {
+          if (Object.keys(carPart).length !== 0)
+            return (
+              <OrderItem
+                key={carPart.p_id}
+                product={carPart}
+                removeProduct={(product) => remove(product)}
+              />
+            );
+          return null;
         })}
       </div>
 
       <div className={s.totalprice}>
-        <h3>Total: {price} ,-</h3>
+        <h3>Total: {totalPrice} ,-</h3>
       </div>
     </div>
   );
@@ -47,7 +45,7 @@ const useStyles = makeStyles((theme) => ({
     width: "25vw",
     height: "94vh",
     float: "left",
-    background: "#F8f8f8",
+    background: "#FFF",
   },
   headline: {
     width: "100%",

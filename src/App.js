@@ -1,5 +1,5 @@
 "use-strict";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import OrderListContainer from "./components/OrderListContainer";
@@ -8,40 +8,59 @@ import { makeStyles } from "@material-ui/core/";
 
 function App(props) {
   const s = useStyles();
-  const [car, setCar] = useState([]);
+  const [productList, setProductList] = useState([]);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  useEffect(() => {
-    setCar(carTesting);
-  }, []);
-
-  const addProduct = (product) => {
-    let products = [...car];
-    products.push(product);
-    setCar(products);
+  const updateList = async (newList) => {
+    await updatePrice(newList);
+    setProductList(newList);
   };
 
-  const removeProduct = (product) => {
-    let products = [...car];
+  // adding product to product list
+  const addProduct = async (product) => {
+    let productListCopy = [...productList];
+    var result = await productListCopy.filter((obj) => {
+      return obj.product_type_fk === product.product_type_fk;
+    });
+    if (result.length === 0) {
+      productListCopy.push(product);
+    }
+    updateList(productListCopy);
+  };
 
-    var index = products.findIndex(function (o) {
-      return o.product_id === product.id;
+  // removing product from product list
+  const removeProduct = async (product) => {
+    let productListCopy = [...productList];
+
+    var result = await productListCopy.filter((obj) => {
+      return obj.p_id === product.p_id;
     });
 
-    if (index !== -1) {
-      products.splice(index, 1);
-      setCar(products);
+    if (result.length !== 0) {
+      const index = await productListCopy.findIndex(
+        (obj) => obj.p_id === result[0].p_id
+      );
+      productListCopy.splice(index, 1);
+      updateList(productListCopy);
     }
+  };
 
-    return null;
+  const updatePrice = (newList) => {
+    let priceNew = 0;
+    newList.map((price) => {
+      return (priceNew = price.p_price + priceNew);
+    });
+    setTotalPrice(priceNew.toFixed(2));
   };
 
   return (
     <div className={s.root}>
       <Header />
-      <ProductContainer products={[1, 2, 3, 4, 5, 6, 7]} />
+      <ProductContainer addproductToList={(product) => addProduct(product)} />
       <OrderListContainer
-        carParts={car}
+        productList={productList}
         removeProduct={(product) => removeProduct(product)}
+        totalPrice={totalPrice}
       />
     </div>
   );
@@ -56,48 +75,3 @@ const useStyles = makeStyles((theme) => ({
     background: "#CCC",
   },
 }));
-
-const carTesting = [
-  {
-    product_id: 1,
-    product_model_name: "Sedan",
-    product_price: 5000.0,
-    product_type_name: "Car Body",
-    manufacture_name: "Nissan",
-  },
-  {
-    product_id: 33,
-    product_model_name: "V8",
-    product_price: 9299.5,
-    product_type_name: "Engine",
-    manufacture_name: "Yamaha",
-  },
-  {
-    product_id: 23,
-    product_model_name: "Winder tires",
-    product_price: 240.5,
-    product_type_name: "Tires",
-    manufacture_name: "Goodyear",
-  },
-  {
-    product_id: 2,
-    product_model_name: "Tinted",
-    product_price: 240.5,
-    product_type_name: "Windows",
-    manufacture_name: "Glassman",
-  },
-  {
-    product_id: 12,
-    product_model_name: "Sedan",
-    product_price: 5000.0,
-    product_type_name: "Car Body",
-    manufacture_name: "Nissan",
-  },
-  {
-    product_id: 332,
-    product_model_name: "V8",
-    product_price: 9299.5,
-    product_type_name: "Engine",
-    manufacture_name: "Yamaha",
-  },
-];

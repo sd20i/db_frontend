@@ -19,19 +19,19 @@ function OrderListContainer(props) {
 
       <div className={s.orderlist}>
         {productList.map((carPart) => {
-          if (Object.keys(carPart).length !== 0)
-            return (
-              <OrderItem
-                key={carPart.p_id}
-                product={carPart}
-                removeProduct={(product) => remove(product)}
-                productType={carPart.product_type}
-              />
-            );
-          return null;
+          return (
+            <OrderItem
+              key={carPart.p_id}
+              product={carPart}
+              removeProduct={(product) => remove(product)}
+              productType={carPart.product_type}
+            />
+          );
         })}
+        {productList.length === 0 && (
+          <h4 className={s.emptyMsg}>Product list is empty</h4>
+        )}
       </div>
-
       <div className={s.totalprice}>
         <h3>Total: {totalPrice} ,-</h3>
       </div>
@@ -62,6 +62,12 @@ const useStyles = makeStyles((theme) => ({
   },
   totalprice: {
     padding: "1vh",
+  },
+  emptyMsg: {
+    width: "100%",
+    color: "#757575",
+    paddingTop: 50,
+    textAlign: "center",
   },
 }));
 

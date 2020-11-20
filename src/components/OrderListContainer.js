@@ -3,9 +3,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import OrderItem from "./OrderItem";
 import { makeStyles } from "@material-ui/core/";
+import { useHistory } from "react-router-dom";
 
 function OrderListContainer(props) {
   const s = useStyles();
+  let history = useHistory();
 
   const { productList, totalPrice } = props;
 
@@ -38,7 +40,7 @@ function OrderListContainer(props) {
           <button
             className={productList.length === 0 ? s.buttonInactive : s.button}
             disabled={productList.length === 0}
-            onClick={() => console.log("hey")}
+            onClick={() => history.push("/checkout")}
           >
             Checkout
           </button>

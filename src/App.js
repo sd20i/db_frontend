@@ -5,6 +5,9 @@ import Header from "./components/Header";
 import OrderListContainer from "./components/OrderListContainer";
 import ProductContainer from "./components/ProductContainer";
 import { makeStyles } from "@material-ui/core/";
+import SplashScreen from "./views/SplashScreen";
+import Checkout from "./views/Checkout";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 
 function App(props) {
   const s = useStyles();
@@ -61,16 +64,28 @@ function App(props) {
   return (
     <div className={s.root}>
       <Header />
-      <ProductContainer
-        addproductToList={(product, productType) =>
-          addProduct(product, productType)
-        }
-      />
-      <OrderListContainer
-        productList={productList}
-        removeProduct={(product) => removeProduct(product)}
-        totalPrice={totalPrice}
-      />
+      <Router>
+        <Switch>
+          <Route exact path="/shop">
+            <ProductContainer
+              addproductToList={(product, productType) =>
+                addProduct(product, productType)
+              }
+            />
+            <OrderListContainer
+              productList={productList}
+              removeProduct={(product) => removeProduct(product)}
+              totalPrice={totalPrice}
+            />
+          </Route>
+          <Route path="/checkout">
+            <Checkout productList={productList} />
+          </Route>
+          <Route path="/">
+            <SplashScreen />
+          </Route>
+        </Switch>
+      </Router>
     </div>
   );
 }

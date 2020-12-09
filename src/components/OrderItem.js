@@ -11,7 +11,6 @@ function OrderItem(props) {
     props.removeProduct(product);
   };
 
-  console.log(productType);
   return (
     <div className={s.root}>
       <header className={s.headline}>

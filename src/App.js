@@ -79,7 +79,7 @@ function App(props) {
             />
           </Route>
           <Route path="/checkout">
-            <Checkout productList={productList} />
+            <Checkout productList={productList} totalPrice={totalPrice} />
           </Route>
           <Route path="/">
             <SplashScreen />

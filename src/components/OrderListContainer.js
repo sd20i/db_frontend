@@ -86,6 +86,7 @@ const useStyles = makeStyles((theme) => ({
     color: "#FFF",
     fontWeight: "bold",
     cursor: "pointer",
+    borderRadius: 5,
   },
   buttonInactive: {
     width: "80%",
@@ -94,6 +95,7 @@ const useStyles = makeStyles((theme) => ({
     background: "#CCC",
     color: "#EEE",
     fontWeight: "bold",
+    borderRadius: 5,
   },
   emptyMsg: {
     width: "100%",

@@ -1,5 +1,5 @@
 "use-strict";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import OrderListContainer from "./components/OrderListContainer";
@@ -7,17 +7,44 @@ import ProductContainer from "./components/ProductContainer";
 import { makeStyles } from "@material-ui/core/";
 import SplashScreen from "./views/SplashScreen";
 import Checkout from "./views/Checkout";
+import Recipt from "./views/Receipt";
+import { firebase } from "./firebase/firebaseConfig";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import signIn from "./api/signIn";
 
 function App(props) {
   const s = useStyles();
   const [productList, setProductList] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState("");
 
   const updateList = async (newList) => {
     await updatePrice(newList);
     setProductList(newList);
   };
+
+  const signInUser = async (idToken) => {
+    const user = await signIn(idToken);
+    setUser(user);
+    setToken(idToken);
+  };
+
+  useEffect(() => {
+    if (firebase.apps.length) {
+      firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+          firebase
+            .auth()
+            .currentUser.getIdToken(true)
+            .then(function (idToken) {
+              signInUser(idToken);
+              return idToken;
+            });
+        }
+      });
+    }
+  }, []);
 
   // adding product to product list
   const addProduct = async (product, productType) => {
@@ -79,8 +106,18 @@ function App(props) {
             />
           </Route>
           <Route path="/checkout">
-            <Checkout productList={productList} totalPrice={totalPrice} />
+            <Checkout
+              productList={productList}
+              totalPrice={totalPrice}
+              user={user}
+              token={token}
+            />
           </Route>
+
+          <Route path="/myorders">
+            <Recipt user={user} token={token} />
+          </Route>
+
           <Route path="/">
             <SplashScreen />
           </Route>

@@ -3,44 +3,24 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import { makeStyles, Grid } from "@material-ui/core/";
 import CheckoutList from "../components/CheckoutList";
-import { firebase } from "../firebase/firebaseConfig";
 import { googleLogin } from "../firebase/firebaseAuth";
-import signIn from "../api/signIn";
 import updateCustomer from "../api/updateCustomer";
+import placeNewOrder from "../api/createNewOrder";
+import { useHistory } from "react-router-dom";
 
 function Checkout(props) {
   const s = useStyles();
-  const { productList, totalPrice } = props;
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState("");
-
-  useEffect(() => {
-    if (firebase.apps.length) {
-      firebase.auth().onAuthStateChanged(function (user) {
-        if (user) {
-          firebase
-            .auth()
-            .currentUser.getIdToken(true)
-            .then(function (idToken) {
-              signInUser(idToken);
-              return idToken;
-            });
-        }
-      });
-    }
-  }, []);
-
-  const signInUser = async (idToken) => {
-    const user = await signIn(idToken);
-    setUser(user);
-    setToken(idToken);
-  };
+  const { productList, totalPrice, user, token } = props;
 
   return (
     <div className={s.root}>
       <Grid container>
         <LeftPanel user={user} token={token} />
-        <RightPanel products={productList} totalPrice={totalPrice} />
+        <RightPanel
+          products={productList}
+          totalPrice={totalPrice}
+          customerId={user}
+        />
       </Grid>
     </div>
   );
@@ -224,7 +204,29 @@ const LeftPanel = (props) => {
 
 const RightPanel = (props) => {
   const s = useStyles();
-  const { products, totalPrice } = props;
+  const { products, totalPrice, customerId } = props;
+  const history = useHistory();
+
+  const placeOrder = async () => {
+    console.log(customerId.c_id);
+    let productsArray = [];
+    await products.map((product) => {
+      productsArray.push(product.p_id);
+      return productsArray;
+    });
+
+    const orderStatus = await placeNewOrder(customerId.c_id, productsArray);
+    console.log(orderStatus);
+    if (orderStatus.status) {
+      history.push({
+        pathname: "/myorders",
+        search: "?query=customerorderdetails",
+        state: { order: productsArray },
+      });
+    }
+    return null;
+  };
+
   return (
     <Grid item md={6}>
       <div className={s.centerInfo}>
@@ -235,6 +237,14 @@ const RightPanel = (props) => {
           })}
 
           <p className={s.totalPrice}>{totalPrice},-</p>
+
+          {customerId !== null && customerId.hasOwnProperty("c_id") && (
+            <div className={s.submitBtnCon}>
+              <button className={s.submitBtn} onClick={() => placeOrder()}>
+                Buy car parts
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </Grid>

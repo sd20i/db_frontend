@@ -39,6 +39,7 @@ function App(props) {
             .currentUser.getIdToken(true)
             .then(function (idToken) {
               signInUser(idToken);
+              console.log(idToken);
               return idToken;
             });
         }

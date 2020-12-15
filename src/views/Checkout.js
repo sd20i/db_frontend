@@ -133,7 +133,7 @@ const LeftPanel = (props) => {
               </div>
 
               <div className={s.inputCon}>
-                <p className={s.inputLabel}>House number</p>
+                <p className={s.inputLabel}>Floor</p>
                 <input
                   type="text"
                   name="c_floor"
